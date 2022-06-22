@@ -1,6 +1,7 @@
 package org.opensearch.path.to.plugin;
 
 import org.opensearch.action.ActionResponse;
+import org.opensearch.action.admin.cluster.health.ClusterHealthResponse;
 import org.opensearch.cluster.ClusterState;
 import org.opensearch.cluster.health.ClusterHealthStatus;
 import org.opensearch.cluster.health.ClusterIndexHealth;
@@ -87,6 +88,8 @@ public class ClusterHAHealthResponse extends ActionResponse implements StatusToX
     private static final String INITIALIZING_SHARDS = "initializing_shards";
     private static final String UNASSIGNED_SHARDS = "unassigned_shards";
     private static final String INDICES = "indices";
+
+    //ClusterHealthResponse clusterHealthResponse;
 
     private static final ConstructingObjectParser<ClusterHAHealthResponse, Void> PARSER = new ConstructingObjectParser<>(
             "cluster_health_response",
@@ -188,7 +191,13 @@ public class ClusterHAHealthResponse extends ActionResponse implements StatusToX
     private ClusterStateHealth clusterStateHealth;
     private ClusterHealthStatus clusterHealthStatus;
 
+    private ClusterHealthResponse clusterHealthResponse;
+
     public ClusterHAHealthResponse() {}
+
+    public ClusterHAHealthResponse(ClusterHealthResponse clusterHealthResponse) {
+        this.clusterHealthResponse = clusterHealthResponse;
+    }
 
     public ClusterHAHealthResponse(StreamInput in) throws IOException {
         super(in);
@@ -393,7 +402,7 @@ public class ClusterHAHealthResponse extends ActionResponse implements StatusToX
         builder.field(INITIALIZING_SHARDS, getInitializingShards());
         builder.field(UNASSIGNED_SHARDS, getUnassignedShards());
         builder.field(DELAYED_UNASSIGNED_SHARDS, getDelayedUnassignedShards());
-        builder.field(NUMBER_OF_PENDING_TASKS, getNumberOfPendingTasks());
+        builder.field(NUMBER_OF_PENDING_TASKS, 20);
         builder.field(NUMBER_OF_IN_FLIGHT_FETCH, getNumberOfInFlightFetch());
         builder.humanReadableField(TASK_MAX_WAIT_TIME_IN_QUEUE_IN_MILLIS, TASK_MAX_WAIT_TIME_IN_QUEUE, getTaskMaxWaitingTime());
         builder.percentageField(ACTIVE_SHARDS_PERCENT_AS_NUMBER, ACTIVE_SHARDS_PERCENT, getActiveShardsPercent());

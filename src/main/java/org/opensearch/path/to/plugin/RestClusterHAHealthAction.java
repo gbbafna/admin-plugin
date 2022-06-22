@@ -1,5 +1,6 @@
 package org.opensearch.path.to.plugin;
 
+import org.opensearch.action.ActionListener;
 import org.opensearch.action.admin.cluster.health.ClusterHealthRequest;
 import org.opensearch.client.node.NodeClient;
 import org.opensearch.common.logging.DeprecationLogger;
@@ -42,7 +43,7 @@ public class RestClusterHAHealthAction extends BaseRestHandler {
     @Override
     public RestChannelConsumer prepareRequest(final RestRequest request, final NodeClient client) throws IOException {
         final ClusterHealthRequest clusterHealthRequest = fromRequest(request);
-        return channel -> client.admin().cluster().health(clusterHealthRequest, new RestStatusToXContentListener<>(channel));
+        return channel -> client.execute(ClusterHAHealthAction.INSTANCE, clusterHealthRequest, new RestStatusToXContentListener<>(channel));
     }
 
     public static ClusterHealthRequest fromRequest(final RestRequest request) {
