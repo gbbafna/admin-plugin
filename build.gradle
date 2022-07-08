@@ -105,6 +105,9 @@ testClusters.integTest {
 
     // This installs our plugin into the testClusters
     plugin(project.tasks.bundlePlugin.archiveFile)
+    numberOfNodes = 3
+    setting 'node.attr.zone' , '1a'
+
 }
 
 run {
